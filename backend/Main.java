@@ -14,13 +14,18 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+        // Read dynamic port assigned by Render, defaulting to 8080 for local execution
+        String portEnv = System.getenv("PORT");
+        int port = (portEnv != null && !portEnv.isEmpty()) ? Integer.parseInt(portEnv) : 8080;
+
+        // Bind to 0.0.0.0 for cloud container networking
+        HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", port), 0);
 
         // Securely serve static frontend files
         server.createContext("/", ex -> {
             String path = ex.getRequestURI().getPath().equals("/") ? "/index.html" : ex.getRequestURI().getPath();
 
-            // Resolve frontend folder reliably
+            // Resolve frontend folder reliably in both local and container environments
             Path baseDir = Files.exists(Path.of("frontend")) ? Path.of("frontend")
                     : Files.exists(Path.of("..", "frontend")) ? Path.of("..", "frontend")
                     : Path.of("electricity-bill-manager", "frontend");
@@ -42,7 +47,7 @@ public class Main {
         // Register calculation endpoint
         server.createContext("/calculate", Main::handleCalculate);
         server.start();
-        System.out.println("Server running at http://localhost:8080/");
+        System.out.println("Server running on port " + port);
     }
 
     private static void handleCalculate(HttpExchange ex) throws IOException {
@@ -66,34 +71,47 @@ public class Main {
         String type = params.getOrDefault("connectionType", "");
         boolean validCategory = "Domestic".equalsIgnoreCase(type) || "Commercial".equalsIgnoreCase(type);
 
+        double watts;
+        double hours;
+        int days;
+
+        // Parse numeric values with dedicated try-catch block
         try {
-            double watts = Double.parseDouble(params.getOrDefault("watts", "0"));
-            double hours = Double.parseDouble(params.getOrDefault("hours", "0"));
-            int days = Integer.parseInt(params.getOrDefault("days", "0"));
-
-            // Input validation in Java
-            if (name.isEmpty() || id.isEmpty() || !validCategory ||
-                !Double.isFinite(watts) || watts <= 0 ||
-                !Double.isFinite(hours) || hours <= 0 || hours > 24 || days <= 0 || days > 365) {
-                send(ex, 400, "application/json", "{\"error\":\"Invalid inputs: Check numbers, ranges, and connection type (Domestic/Commercial).\"}");
-                return;
-            }
-
-            double units = calculateUnits(watts, hours, days);
-            double energyCharge = calculateEnergyCharge(units);
-            double fixedCharge = 50.00; // Demonstration fixed charge
-            double total = energyCharge + fixedCharge;
-            String category = "Commercial".equalsIgnoreCase(type) ? "Commercial" : "Domestic";
-
-            // Return JSON response formatted to 2 decimal places
-            String json = String.format(Locale.US,
-                "{\"consumerName\":\"%s\",\"connectionId\":\"%s\",\"connectionType\":\"%s\",\"units\":%.2f,\"energyCharge\":%.2f,\"fixedCharge\":%.2f,\"totalAmount\":%.2f}",
-                escapeJson(name), escapeJson(id), escapeJson(category), units, energyCharge, fixedCharge, total);
-
-            send(ex, 200, "application/json", json);
+            watts = Double.parseDouble(params.getOrDefault("watts", "0"));
+            hours = Double.parseDouble(params.getOrDefault("hours", "0"));
+            days = Integer.parseInt(params.getOrDefault("days", "0"));
         } catch (NumberFormatException e) {
             send(ex, 400, "application/json", "{\"error\":\"Invalid numeric input values.\"}");
+            return;
         }
+
+        // Input validation in Java
+        if (name.isEmpty() || id.isEmpty() || !validCategory ||
+            !Double.isFinite(watts) || watts <= 0 ||
+            !Double.isFinite(hours) || hours <= 0 || hours > 24 || days <= 0 || days > 365) {
+            send(ex, 400, "application/json", "{\"error\":\"Invalid inputs: Check numbers, ranges, and connection type (Domestic/Commercial).\"}");
+            return;
+        }
+
+        // Perform calculation logic
+        double units = calculateUnits(watts, hours, days);
+        double energyCharge = calculateEnergyCharge(units);
+        double fixedCharge = 50.00; // Demonstration fixed charge
+        double total = energyCharge + fixedCharge;
+        String category = "Commercial".equalsIgnoreCase(type) ? "Commercial" : "Domestic";
+
+        // Construct clean JSON response rounded to 2 decimal places
+        String json = "{"
+            + "\"consumerName\":\"" + escapeJson(name) + "\","
+            + "\"connectionId\":\"" + escapeJson(id) + "\","
+            + "\"connectionType\":\"" + escapeJson(category) + "\","
+            + String.format(Locale.US, "\"units\":%.2f,", units)
+            + String.format(Locale.US, "\"energyCharge\":%.2f,", energyCharge)
+            + String.format(Locale.US, "\"fixedCharge\":%.2f,", fixedCharge)
+            + String.format(Locale.US, "\"totalAmount\":%.2f", total)
+            + "}";
+
+        send(ex, 200, "application/json", json);
     }
 
     private static double calculateUnits(double watts, double hours, int days) {

@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
             displayReceipt(data, billingDays);
 
         } catch (err) {
-            showError("Network error: Unable to reach Java backend server at http://localhost:8080/.");
+            showError("Network error: Unable to reach Java backend server.");
             receiptSection.classList.add("hidden");
         } finally {
             submitBtn.disabled = false;

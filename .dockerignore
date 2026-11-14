@@ -1,0 +1,7 @@
+.git
+.agents
+*.class
+*.log
+*.tmp
+run-server.bat
+plan.md
