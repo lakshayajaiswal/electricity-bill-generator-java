@@ -1,0 +1,324 @@
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #f1f5f9;
+    color: #1e293b;
+    line-height: 1.5;
+    padding: 24px 16px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Header */
+.app-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.app-header h1 {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.025em;
+}
+
+.app-header .subtitle {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+/* Layout Grid */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 768px) {
+    .content-grid {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+}
+
+/* Card Container */
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.card h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.section-desc {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
+.form-section {
+    border: none;
+    margin-bottom: 20px;
+}
+
+.form-section legend {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 4px;
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #1e293b;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:focus, select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.hint {
+    display: block;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.15s ease;
+}
+
+.btn-primary {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-secondary {
+    background-color: #0f172a;
+    color: #ffffff;
+}
+
+.btn-secondary:hover {
+    background-color: #334155;
+}
+
+/* Alerts */
+.alert {
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    margin-bottom: 16px;
+}
+
+.alert-error {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Receipt Card */
+.receipt-card {
+    border-top: 4px solid #2563eb;
+}
+
+.receipt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 1px dashed #cbd5e1;
+    padding-bottom: 12px;
+}
+
+.receipt-header h3 {
+    font-size: 1.1rem;
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.badge {
+    font-size: 0.7rem;
+    background-color: #e0f2fe;
+    color: #0369a1;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-left: 6px;
+}
+
+.receipt-date {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.receipt-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+}
+
+.info-label {
+    display: block;
+    color: #64748b;
+    font-size: 0.75rem;
+}
+
+.tag {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: #f1f5f9;
+    font-weight: 600;
+    color: #334155;
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background-color: #e2e8f0;
+    margin: 16px 0;
+}
+
+/* Receipt Table */
+.receipt-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.receipt-table th, .receipt-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.receipt-table th {
+    text-align: left;
+    color: #64748b;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.font-bold {
+    font-weight: 600;
+}
+
+.tariff-note {
+    display: block;
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.total-row {
+    border-top: 2px solid #0f172a;
+    font-size: 1.05rem;
+}
+
+.total-amount {
+    color: #059669;
+    font-size: 1.15rem;
+}
+
+.receipt-actions {
+    margin-top: 16px;
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: #ffffff;
+        padding: 0;
+    }
+
+    .app-header, .form-card, .receipt-actions, .hint {
+        display: none !important;
+    }
+
+    .content-grid {
+        display: block;
+    }
+
+    .receipt-card {
+        box-shadow: none;
+        border: 1px solid #000000;
+        padding: 24px;
+        max-width: 600px;
+        margin: 20px auto;
+        display: block !important;
+    }
+
+    .total-amount {
+        color: #000000;
+    }
+}

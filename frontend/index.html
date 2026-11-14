@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Bill Generator & Connection Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Application Header -->
+        <header class="app-header">
+            <h1>Electricity Bill Generator & Connection Manager</h1>
+            <p class="subtitle">Academic Project | Core Java & Vanilla Web</p>
+        </header>
+
+        <!-- Main Grid: Input Form and Bill Receipt -->
+        <main class="content-grid">
+            <!-- Consumer & Usage Form -->
+            <section class="card form-card">
+                <h2>Generate Electricity Bill</h2>
+                <p class="section-desc">Enter consumer credentials and power consumption details.</p>
+
+                <!-- Error Notification Box -->
+                <div id="errorBox" class="alert alert-error hidden"></div>
+
+                <form id="billForm">
+                    <!-- Section 1: Consumer Details -->
+                    <fieldset class="form-section">
+                        <legend>Consumer Details</legend>
+                        <div class="form-group">
+                            <label for="consumerName">Consumer Name</label>
+                            <input type="text" id="consumerName" name="consumerName" placeholder="e.g. Lakshaya Jaiswal" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="connectionId">Connection ID</label>
+                                <input type="text" id="connectionId" name="connectionId" placeholder="e.g. ELEC-1092" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="connectionType">Connection Type</label>
+                                <select id="connectionType" name="connectionType" required>
+                                    <option value="Domestic" selected>Domestic</option>
+                                    <option value="Commercial">Commercial</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Section 2: Usage Details -->
+                    <fieldset class="form-section">
+                        <legend>Electricity Usage</legend>
+                        <div class="form-group">
+                            <label for="watts">Power Consumption (Watts)</label>
+                            <input type="number" id="watts" name="watts" min="1" step="any" placeholder="e.g. 1000" required>
+                            <small class="hint">Total load wattage of connected electrical appliances.</small>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hours">Usage Hours / Day</label>
+                                <input type="number" id="hours" name="hours" min="0.1" max="24" step="0.1" placeholder="e.g. 2" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="days">Billing Days</label>
+                                <input type="number" id="days" name="days" min="1" max="365" step="1" placeholder="e.g. 30" required>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submitBtn" class="btn btn-primary">
+                        Generate Electricity Bill
+                    </button>
+                </form>
+            </section>
+
+            <!-- Bill Receipt Section (Hidden until calculation) -->
+            <section id="receiptSection" class="card receipt-card hidden">
+                <div class="receipt-header">
+                    <div class="receipt-brand">
+                        <h3>ELECTRICITY BILL RECEIPT</h3>
+                        <span class="badge">OFFICIAL DEMO</span>
+                    </div>
+                    <p class="receipt-date" id="billDate"></p>
+                </div>
+
+                <!-- Consumer Information -->
+                <div class="receipt-info-grid">
+                    <div>
+                        <span class="info-label">Consumer Name:</span>
+                        <strong id="resName">-</strong>
+                    </div>
+                    <div>
+                        <span class="info-label">Connection ID:</span>
+                        <strong id="resId">-</strong>
+                    </div>
+                    <div>
+                        <span class="info-label">Connection Type:</span>
+                        <span id="resType" class="tag">-</span>
+                    </div>
+                    <div>
+                        <span class="info-label">Billing Cycle:</span>
+                        <span id="resDays">-</span>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <!-- Calculation Breakdown Table -->
+                <table class="receipt-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th class="text-right">Details / Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total Electricity Units Consumed</td>
+                            <td class="text-right font-bold"><span id="resUnits">0.00</span> kWh (Units)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Energy Charges
+                                <small class="tariff-note">Slab: First 100 @ ₹4.50/unit, Above 100 @ ₹6.50/unit</small>
+                            </td>
+                            <td class="text-right">₹ <span id="resEnergy">0.00</span></td>
+                        </tr>
+                        <tr>
+                            <td>Fixed Connection Charge</td>
+                            <td class="text-right">₹ <span id="resFixed">50.00</span></td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>Total Amount Payable</td>
+                            <td class="text-right font-bold total-amount">₹ <span id="resTotal">0.00</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Receipt Actions -->
+                <div class="receipt-actions">
+                    <button type="button" id="printBtn" class="btn btn-secondary">
+                        Print Bill Receipt
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
